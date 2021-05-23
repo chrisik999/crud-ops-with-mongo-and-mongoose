@@ -14,5 +14,8 @@
     "mongodb": "^3.6.7",
     "mongoose": "^5.12.10",
     "nodemon": "^2.0.7"
+  },
+  "engines": {
+    "node": "12.16.3"
   }
 }
