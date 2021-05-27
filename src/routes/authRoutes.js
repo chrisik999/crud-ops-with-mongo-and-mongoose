@@ -7,4 +7,7 @@ router.get('/users', userServices.getAllUsers);
 
 router.post('/signup', userServices.createAUser);
 
+
+router.post('/login', userServices.loginUser)
+
 module.exports = router;

@@ -59,6 +59,39 @@ exports.createAUser = (req, res) => {
     })
 }
 
+exports.loginUser = (req, res) => {
+    //get user details from request body
+    const user = req.body.user;
+
+    //check if user exist
+    User.findOne({username: user.username}, (err, foundUser) => {
+        if(err) {
+            return res.status(500).json({message: err});
+        }
+        if(!foundUser) {
+            return res.status(401).json({message: "Incorrect Username"});
+        }
+        //check if password matches the one in database
+        let matchPassword = bcrypt.compareSync(user.password, foundUser.password);
+
+        if(!matchPassword) {
+            return res.status(401).json({message: "Incorrect password"});
+        }
+        //create token and send to user
+        jwt.sign({
+            firstName: foundUser.firstName,
+            lastName: foundUser.lastName,
+            username: foundUser.username
+        },secret, {expiresIn: expiry}, (err, token) => {
+            if(err) {
+                return res.status(500).json({message: err});
+            }
+            return res.status(200).json({message: "Successful", token});
+        })
+    })
+
+}
+
 exports.getAllUsers = (req, res) => {
     User.find({}, (err, users) =>{
         if(err) {
